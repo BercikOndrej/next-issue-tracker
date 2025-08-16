@@ -1,12 +1,13 @@
-'use client';
-
 import { Button } from '@radix-ui/themes';
+import Link from 'next/link';
 import React from 'react';
 
 const IssuesPage = () => {
   return (
     <div>
-      <Button onClick={() => console.log('New issue')}>Create issue</Button>
+      <Button>
+        <Link href={'/issues/new'}>Create issue</Link>
+      </Button>
     </div>
   );
 };
