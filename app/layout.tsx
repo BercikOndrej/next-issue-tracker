@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${inter.variable} antialiased`}>
-        <Theme accentColor='gold' radius='large' appearance='dark'>
+        <Theme accentColor='jade' radius='large' appearance='light'>
           <Navbar />
           <main className='p-6'>{children}</main>
         </Theme>
