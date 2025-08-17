@@ -1,20 +1,23 @@
 'use client';
 
-import { Button, Callout, Heading, TextField } from '@radix-ui/themes';
+import { Button, Callout, Heading, Text, TextField } from '@radix-ui/themes';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { MdError } from 'react-icons/md';
+import { createIssueSchema } from '@/app/validation-schemas';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-interface FormData {
-  title: string;
-  description: string;
-}
+type FormData = z.infer<typeof createIssueSchema>;
 
 const CreateIssuePage = () => {
-  const { handleSubmit, control } = useForm<FormData>();
+  const { handleSubmit, control, formState } = useForm<FormData>({
+    resolver: zodResolver(createIssueSchema),
+  });
+
   const router = useRouter();
   const [error, setError] = useState('');
 
@@ -40,7 +43,7 @@ const CreateIssuePage = () => {
   };
 
   return (
-    <div className='space-y-4 mt-4 max-w-xl'>
+    <div className='max-w-xl'>
       <Heading>Create new issue</Heading>
       {error && (
         <Callout.Root className='mt-4' color='red'>
@@ -50,28 +53,42 @@ const CreateIssuePage = () => {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form className='space-y-4 mt-6 ' onSubmit={handleSubmit(onSubmit)}>
+      <form className='space-y-6 mt-6' onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name='title'
           control={control}
           render={({ field }) => (
-            <TextField.Root
-              placeholder='Title'
-              value={field.value ?? ''}
-              onChange={(e) =>
-                field.onChange((e.target as HTMLInputElement).value)
-              }
-              onBlur={field.onBlur}
-            />
+            <div>
+              <TextField.Root
+                placeholder='Title'
+                value={field.value ?? ''}
+                onChange={(e) =>
+                  field.onChange((e.target as HTMLInputElement).value)
+                }
+                onBlur={field.onBlur}
+              />
+              {formState.errors && formState.errors.title && (
+                <Text color='red'>{formState.errors.title.message}</Text>
+              )}
+            </div>
           )}
         />
 
         <Controller
           name='description'
           control={control}
-          render={({ field }) => <SimpleMDE {...field} />}
+          render={({ field }) => (
+            <div>
+              <SimpleMDE {...field} />
+              {formState.errors && formState.errors.description && (
+                <Text color='red' as='p'>
+                  {formState.errors.description.message}
+                </Text>
+              )}
+            </div>
+          )}
         />
-        <Button>Create</Button>
+        <Button>Create an issue</Button>
       </form>
     </div>
   );
