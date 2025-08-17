@@ -1,11 +1,12 @@
 'use client';
 
-import { Button, Heading, TextField } from '@radix-ui/themes';
+import { Button, Callout, Heading, TextField } from '@radix-ui/themes';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { MdError } from 'react-icons/md';
 
 interface FormData {
   title: string;
@@ -15,29 +16,41 @@ interface FormData {
 const CreateIssuePage = () => {
   const { handleSubmit, control } = useForm<FormData>();
   const router = useRouter();
+  const [error, setError] = useState('');
 
   const onSubmit = async (data: FormData) => {
     try {
-      await fetch('/api/issues', {
+      const response = await fetch('/api/issues', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
+
+      if (!response.ok) {
+        throw new Error(`Status code: ${response.status}`);
+      }
+
       router.push('/issues');
     } catch (err) {
       console.error(err);
+      setError('An unexpected error occurred');
     }
   };
 
   return (
-    <div>
+    <div className='space-y-4 mt-4 max-w-xl'>
       <Heading>Create new issue</Heading>
-      <form
-        className='space-y-4 mt-6 max-w-xl'
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      {error && (
+        <Callout.Root className='mt-4' color='red'>
+          <Callout.Icon>
+            <MdError />
+          </Callout.Icon>
+          <Callout.Text>{error}</Callout.Text>
+        </Callout.Root>
+      )}
+      <form className='space-y-4 mt-6 ' onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name='title'
           control={control}
