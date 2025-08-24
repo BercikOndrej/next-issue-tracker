@@ -10,6 +10,7 @@ import { MdError } from 'react-icons/md';
 import { createIssueSchema } from '@/app/validation-schemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ErrorMessage from '@/app/components/ErrorMessage';
 
 type FormData = z.infer<typeof createIssueSchema>;
 
@@ -67,9 +68,7 @@ const CreateIssuePage = () => {
                 }
                 onBlur={field.onBlur}
               />
-              {formState.errors && formState.errors.title && (
-                <Text color='red'>{formState.errors.title.message}</Text>
-              )}
+              <ErrorMessage>{formState.errors.title?.message}</ErrorMessage>
             </div>
           )}
         />
@@ -80,11 +79,9 @@ const CreateIssuePage = () => {
           render={({ field }) => (
             <div>
               <SimpleMDE {...field} />
-              {formState.errors && formState.errors.description && (
-                <Text color='red' as='p'>
-                  {formState.errors.description.message}
-                </Text>
-              )}
+              <ErrorMessage>
+                {formState.errors.description?.message}
+              </ErrorMessage>
             </div>
           )}
         />
