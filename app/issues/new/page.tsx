@@ -10,8 +10,8 @@ import { MdError } from 'react-icons/md';
 import { createIssueSchema } from '@/app/validation-schemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import ErrorMessage from '@/app/components/ErrorMessage';
-import Spinner from '../../components/Spinner';
+import ErrorMessage from '@/app/components/error-message';
+import Spinner from '../../components/spinner';
 
 type FormData = z.infer<typeof createIssueSchema>;
 
