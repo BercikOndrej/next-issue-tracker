@@ -1,4 +1,4 @@
-import SimpleLoadingMessage from '@/app/components/simple-loading-message';
+import SimpleLoadingMessage from '@/app/components/SimpleLoadingMessage';
 import React from 'react';
 
 const Loading = () => {
