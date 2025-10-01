@@ -1,21 +1,21 @@
 'use client';
 
-import { Button, Callout, Heading, Text, TextField } from '@radix-ui/themes';
-import SimpleMDE from 'react-simplemde-editor';
-import 'easymde/dist/easymde.min.css';
-import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { MdError } from 'react-icons/md';
-import { createIssueSchema } from '@/app/validation-schemas';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import ErrorMessage from '@/app/components/ErrorMessage';
+import { createIssueSchema } from '@/app/validation-schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Callout, Heading, TextField } from '@radix-ui/themes';
+import 'easymde/dist/easymde.min.css';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { MdError } from 'react-icons/md';
+import SimpleMDE from 'react-simplemde-editor';
+import { z } from 'zod';
 import Spinner from '../../components/Spinner';
 
 type FormData = z.infer<typeof createIssueSchema>;
 
-const CreateIssuePage = () => {
+const CreateIssuePage = async () => {
   const { handleSubmit, control, formState } = useForm<FormData>({
     resolver: zodResolver(createIssueSchema),
   });
