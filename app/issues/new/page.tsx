@@ -1,6 +1,5 @@
 'use client';
 
-import ErrorMessage from '@/app/components/ErrorMessage';
 import { createIssueSchema } from '@/app/validation-schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Callout, Heading, TextField } from '@radix-ui/themes';
@@ -11,11 +10,11 @@ import { Controller, useForm } from 'react-hook-form';
 import { MdError } from 'react-icons/md';
 import SimpleMDE from 'react-simplemde-editor';
 import { z } from 'zod';
-import Spinner from '../../components/Spinner';
+import { ErrorMessage, Spinner } from '@/app/components';
 
 type FormData = z.infer<typeof createIssueSchema>;
 
-const CreateIssuePage = async () => {
+const CreateIssuePage = () => {
   const { handleSubmit, control, formState } = useForm<FormData>({
     resolver: zodResolver(createIssueSchema),
   });
